@@ -1,0 +1,254 @@
+<div [class]="'app-sidebar sidebar-shadow ' + (config$ | async).sidebarTheme" (mouseover)="sidebarHoverMouseIn()"
+  (mouseout)="sidebarHoverMouseOut()">
+  <div class="app-header__logo">
+    <div class="logo-src"></div>
+    <div class="header__pane ms-auto">
+      <button type="button" class="hamburger close-sidebar-btn hamburger--elastic"
+        [ngClass]="{'is-active' : globals.toggleSidebar}" (click)="toggleSidebar();">
+        <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+        </span>
+      </button>
+    </div>
+  </div>
+  <div class="app-sidebar-content" style="background: linear-gradient(to bottom, #fff 50%, #ccc 100%);">
+    <div class="app-sidebar-scroll ">
+      <perfect-scrollbar [autoPropagation]="true" class="scroll-container" [config]="config" [scrollIndicators]="true"
+        style="max-width: 600px; max-height: 690px;">
+        <div class="v-sidebar-menu vsm-default dynamicscrollbar">
+          <div class="vsm-list">
+            <ngb-accordion [destroyOnHide]="false" [closeOthers]="true" #acc="ngbAccordion"
+              activeIds="{{extraParameter}}">
+              <ngb-panel>
+                <ng-template ngbPanelHeader>
+                  <div class="vsm-header">SECP ADMIN PORTAL</div>
+                </ng-template>
+              </ngb-panel>
+
+              <ngb-panel id="dashboard">
+                <ng-template ngbPanelHeader>
+                  <button ngbPanelToggle class="vsm-link">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">dashboard</span>
+                    <i class="vsm-arrow"></i>
+                  </button>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                  <div class="vsm-dropdown">
+                    <div class="vsm-list">
+                      <button class="vsm-link" routerLink="/main/Dashboard" [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">dashboard</span>
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-panel>
+
+
+
+              <ngb-panel id="Content">
+                <ng-template ngbPanelHeader>
+                  <button ngbPanelToggle class="vsm-link">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">Content</span>
+                    <i class="vsm-arrow"></i>
+                  </button>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                  <div class="vsm-dropdown">
+                    <div class="vsm-list">
+                      <button class="vsm-link" routerLink="/main/categories" [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">Categories</span>
+                      </button>
+                      <button class="vsm-link" routerLink="/main/courses" [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">Courses</span>
+                      </button>
+                      <button class="vsm-link" routerLink="/main/lecture" [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">Lectures</span>
+                      </button>
+
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-panel>
+
+              <!-- <ngb-panel id="dashboards">
+                <ng-template ngbPanelHeader>
+                  <button class="vsm-link" routerLink="/main/categories" [routerLinkActiveOptions]="{exact: true}">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">Categories</span>
+                  </button>
+                </ng-template>
+              
+              </ngb-panel>
+              <ngb-panel id="courses">
+                <ng-template ngbPanelHeader>
+                  <button class="vsm-link" routerLink="/main/courses" [routerLinkActiveOptions]="{exact: true}">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">Courses</span>
+                  </button>
+                </ng-template>
+              </ngb-panel>
+              <ngb-panel id="lecture">
+
+                <ng-template ngbPanelHeader>
+                  <button class="vsm-link" routerLink="/main/lecture" [routerLinkActiveOptions]="{exact: true}">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">Lectures</span>
+                  </button>
+                </ng-template>
+              </ngb-panel> -->
+              <ngb-panel>
+                <ng-template ngbPanelHeader>
+                  <div class="vsm-header">Trainings</div>
+                </ng-template>
+              </ngb-panel>
+              <ngb-panel id="Trainings">
+                <ng-template ngbPanelHeader>
+                  <button ngbPanelToggle class="vsm-link">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">Trainings</span>
+                    <i class="vsm-arrow"></i>
+                  </button>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                  <div class="vsm-dropdown">
+                    <div class="vsm-list">
+                      <button class="vsm-link" routerLink="/main/training/courseContent"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">Course Content</span>
+                      </button>
+                      <button class="vsm-link" routerLink="/main/training/Quiz"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">Quiz</span>
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-panel>
+              <ngb-panel id="dashboards">
+                <ng-template ngbPanelHeader>
+                  <button class="vsm-link" routerLink="/main/Assessment" [routerLinkActiveOptions]="{exact: true}">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">Course Assessment</span>
+                  </button>
+                </ng-template>
+              </ngb-panel>
+              <!-- <ngb-panel>
+                <ng-template ngbPanelHeader>
+                  <div class="vsm-header">Assessment</div>
+                </ng-template>
+              </ngb-panel>
+              <ngb-panel id="dashboards">
+                <ng-template ngbPanelHeader>
+                  <button class="vsm-link" routerLink="/main/Assessment" [routerLinkActiveOptions]="{exact: true}">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">Assessment</span>
+                  </button>
+                </ng-template>
+              </ngb-panel> -->
+              <ngb-panel>
+                <ng-template ngbPanelHeader>
+                  <div class="vsm-header">USER MANAGEMENT</div>
+                </ng-template>
+              </ngb-panel>
+              <ngb-panel id="dashboards">
+                <ng-template ngbPanelHeader>
+                  <button class="vsm-link" routerLink="/main/user" [routerLinkActiveOptions]="{exact: true}">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">User Mangement</span>
+                  </button>
+                </ng-template>
+              </ngb-panel>
+              <ngb-panel id="grades">
+                <ng-template ngbPanelHeader>
+                  <button ngbPanelToggle class="vsm-link">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">Grades</span>
+                    <i class="vsm-arrow"></i>
+                  </button>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                  <div class="vsm-dropdown">
+                    <div class="vsm-list">
+                      <button class="vsm-link" routerLink="/main/GradingCriteria"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">Custom Grading Criteria</span>
+                      </button>
+                      <button class="vsm-link" routerLink="/main/GradesReport"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">User Grades</span>
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-panel>
+              <!-- <ngb-panel id="dashboards">
+                <ng-template ngbPanelHeader>
+                  <button class="vsm-link" routerLink="/main/GradingCriteria" [routerLinkActiveOptions]="{exact: true}">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">Custom Grading Criteria</span>
+                  </button>
+                </ng-template>
+              </ngb-panel>
+              <ngb-panel id="dashboards">
+                <ng-template ngbPanelHeader>
+                  <button class="vsm-link" routerLink="/main/GradesReport" [routerLinkActiveOptions]="{exact: true}">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">User Grades</span>
+                  </button>
+                </ng-template>
+              </ngb-panel> -->
+              <ngb-panel id="Enrollment">
+                <ng-template ngbPanelHeader>
+                  <button ngbPanelToggle class="vsm-link">
+                    <i class="vsm-icon pe-7s-rocket"></i>
+                    <span class="vsm-title">Enrollment</span>
+                    <i class="vsm-arrow"></i>
+                  </button>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                  <div class="vsm-dropdown">
+                    <div class="vsm-list">
+                      <button class="vsm-link" routerLink="/main/EnrollUser" [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">Enroll User</span>
+                      </button>
+                      <button class="vsm-link" routerLink="/main/userReport" [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">Enrolled User Report</span>
+                      </button>
+                      <button class="vsm-link" routerLink="/main/CoursesCountReport"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">Courses Enrollment</span>
+                      </button>
+                      <button class="vsm-link" routerLink="/main/ApprovalUserCourse"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">Course Approval Requests</span>
+                      </button>
+                      <button class="vsm-link" routerLink="/main/CourseApprovalrequests"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <i class="vsm-icon pe-7s-rocket"></i>
+                        <span class="vsm-title">Renewal Course Approval Requests</span>
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-panel>
+            </ngb-accordion>
+          </div>
+        </div>
+      </perfect-scrollbar>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,213 @@
+<div class="modal-header mb-0 p-3">
+    <h4 class="modal-title text-bold-500 font-medium-1">{{data.IsReadOnly? "View Question"
+        :data.questionId?"EditQuestion":"Add Question"}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeClick()">
+    </button>
+</div>
+<form [formGroup]="QuizForm" (ngSubmit)="AddEditSubmit()">
+    <div class="modal-body" style="max-height:70vh ; overflow: auto;">
+        <div class="form-body">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Select Course</label>
+                    <ng-select class="font-small-1" [items]="CoursesList" bindLabel="courseName" bindValue="courseId"
+                        placeholder="Choose One Option" formControlName="courseId">
+                    </ng-select>
+                    <div *ngIf="QuizForm.controls['courseId'].touched && !QuizForm.controls['courseId'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="QuizForm.controls['courseId'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Select Lecture</label>
+                    <ng-select class="font-small-1" [items]="LectureList" bindLabel="lectureTitle" bindValue="lectureId"
+                        placeholder="Choose One Option" formControlName="lectureId">
+                    </ng-select>
+                    <div *ngIf="QuizForm.controls['lectureId'].touched && !QuizForm.controls['lectureId'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="QuizForm.controls['lectureId'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Difficulty Type</label>
+                    <ng-select class="font-small-1" [items]="questionLevel" bindLabel="name" bindValue="id"
+                        placeholder="Choose One Option" formControlName="difficultyLevel">
+                    </ng-select>
+                    <div
+                        *ngIf="QuizForm.controls['difficultyLevel'].touched && !QuizForm.controls['difficultyLevel'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="QuizForm.controls['difficultyLevel'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Question Type</label>
+                    <ng-select class="font-small-1" [items]="questionType" bindLabel="name" bindValue="id"
+                        placeholder="Choose One Option" formControlName="type">
+                    </ng-select>
+                    <div *ngIf="QuizForm.controls['type'].touched && !QuizForm.controls['type'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="QuizForm.controls['type'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Medium</label>
+                    <ng-select class="font-small-1" [items]="mediumType" bindLabel="name" bindValue="id"
+                        placeholder="Choose One Option" formControlName="medium">
+                    </ng-select>
+                    <div *ngIf="QuizForm.controls['medium'].touched && !QuizForm.controls['medium'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="QuizForm.controls['medium'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Language Type</label>
+                    <ng-select class="font-small-1" [items]="languageTypes" bindLabel="name" bindValue="id"
+                        placeholder="Choose One Option" formControlName="languageTypes">
+                    </ng-select>
+                    <div *ngIf="QuizForm.controls['languageTypes'].touched && !QuizForm.controls['languageTypes'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="QuizForm.controls['languageTypes'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-section">
+                        <div class="form-group ">
+                            <div class="col-6 text-bold-400">Question </div>
+                            <angular-editor id="explanation" [style]="{height: '50px'}" formControlName="question"
+                                [ngStyle]="{'direction':urdu ? 'rtl' : 'ltr'}" [config]="config"></angular-editor>
+                            <div *ngIf="QuizForm.controls['question'].touched && !QuizForm.controls['question'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <div class="form-control-feedback"
+                                        *ngIf="QuizForm.controls['question'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 text-bold-400">Question Options</div>
+                            <div class="col-6 float-right" *ngIf="questionOption.length < maxLength && !btnDisable">
+                                <button [disabled]="data.IsReadOnly" class="btn btn-primary float-end mb-1"
+                                    title="Add New" type="button" (click)="addQuestionOptions(null,false)"><span><i
+                                            class="fa fa-plus"></i></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-container>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-section">
+                            <table class="table table-borderless mb-1" formArrayName="options">
+                                <thead>
+                                    <tr class="table-secondary font-size-12">
+                                        <th class="text-center" width="50%">Options</th>
+                                        <th class="text-center" width="15%">Is Answer</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let key of questionOption.controls; let i=index" [formGroupName]="i">
+
+                                        <td class="">
+                                            <angular-editor id="editor{{i}}" [style]="{height: '50px'}" 
+                                                formControlName="optionTitle"
+                                                [ngStyle]="{'direction':urdu ? 'rtl' : 'ltr'}" [config]="config">
+                                            </angular-editor>
+                                            <div
+                                                *ngIf="questionOptions.controls[i].controls.optionTitle.touched && !questionOptions.controls[i].controls.optionTitle.valid">
+                                                <div *ngFor="let validation of validationMessages.videoLinks"
+                                                    class="has-danger">
+                                                    <span class="form-control-feedback"
+                                                        *ngIf="questionOptions.controls[i].controls.optionTitle.hasError(validation.type) ">
+                                                        {{validation.message}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center pb-3" style="vertical-align: bottom; ">
+                                            <input type="checkbox" name="isAnswer" formControlName="isAnswer"
+                                                class="custom-control-input" (change)="valueChange(i)"
+                                                style="box-shadow: none;">
+                                            <div
+                                                *ngIf="questionOptions.controls[i].controls.isAnswer.touched && !questionOptions.controls[i].controls.isAnswer.valid">
+                                                <div *ngFor="let validation of validationMessages.amount"
+                                                    class="has-danger">
+                                                    <span class="form-control-feedback"
+                                                        *ngIf="questionOptions.controls[i].controls.isAnswer.hasError(validation.type) ">
+                                                        {{validation.message}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <div class="form-section">
+                <div class="row">
+                    <div class="col-6 text-bold-400">Explanation</div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="form-group ">
+                        <angular-editor id="explanation" [style]="{height: '50px'}" formControlName="explanation"
+                            [ngStyle]="{'direction':urdu ? 'rtl' : 'ltr'}" [config]="config"></angular-editor>
+                        <div
+                            *ngIf="QuizForm.controls['explanation'].touched && !QuizForm.controls['explanation'].valid">
+                            <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                <div class="form-control-feedback"
+                                    *ngIf="QuizForm.controls['explanation'].hasError(validation.type) ">
+                                    {{validation.message}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer mb-0 p-2">
+        <button class="btn btn-raised btn-secondary me-1 " type="button" [disabled]="loading" (click)="closeClick()">
+            <i class="fa fa-close"></i> Cancel
+        </button>
+        <button class="btn btn-raised btn-primary" type="submit" [disabled]="!QuizForm.valid">
+            <i class="fa fa-check-square-o"></i> {{data.IsReadOnly? "View" :data.questionId?"Update":"Add"}}
+        </button>
+    </div>
+</form>

@@ -1,0 +1,188 @@
+<div class="filter-widget card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" role="form">
+        <div (click)="isCollapsed = !isCollapsed" class="filter-header p-2">
+            <span class="filter-title"><i class="fa fa-search me-2"></i>Advanced Search Filters</span>
+            <a [attr.aria-expanded]="!isCollapsed" aria-controls="collapseFilter" style="float:right">
+                <i class="fa fa-search" [ngClass]="{'fa-chevron-down': !isCollapsed, 'fa-chevron-up': isCollapsed}"></i>
+            </a>
+        </div>
+        <div id="collapseFilter" [ngbCollapse]="!isCollapsed">
+            <div class="filter-content">
+                <div class="row">
+                    <div class="col-lg-3 required">
+                        <div class="form-group">
+                            <label>Course:</label>
+                            <ng-select class="font-small-1" [items]="courseDDL" bindLabel="courseName"
+                                bindValue="courseId" [multiple]="false" [clearable]="true" placeholder="Choose Course"
+                                (change)="getLectureDDLByCourse($event)" formControlName="courseId">
+                            </ng-select>
+                            <div *ngIf="form.controls['courseId'].touched && !form.controls['courseId'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['courseId'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 required">
+                        <div class="form-group">
+                            <label>Lecture:</label>
+                            <ng-select class="font-small-1" [items]="lectureDDL" bindLabel="lectureTitle"
+                                bindValue="lectureId" [multiple]="false" placeholder="Choose Lecture" [clearable]="true"
+                                formControlName="lectureId">
+                            </ng-select>
+                            <div *ngIf="form.controls['lectureId'].touched && !form.controls['lectureId'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['lectureId'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Content Type:</label>
+                            <select class="form-control" formControlName="type">
+                                <option value=null>Choose one option</option>
+                                <option value="0">Video</option>
+                                <option value="1">Document</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Content Name:</label>
+                            <input type="text" class="form-control " formControlName="contentName"
+                                placeholder="Content Name">
+                            <div *ngIf="form.controls['contentName'].touched && !form.controls['contentName'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['contentName'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="order">Content Order:</label>
+                            <input type="text" class="form-control " formControlName="order"
+                                placeholder="Content Order">
+                            <div *ngIf="form.controls['order'].touched && !form.controls['order'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['order'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <select class="form-control" formControlName="status">
+                                <option value="">Choose one option</option>
+                                <option value="1">Active</option>
+                                <option value="0">In Active</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col-lg-12">
+                        <div class="form-group mb-0">
+                            <button class="mb-2 me-2 btn-icon btn-shadow  btn btn-primary"
+                                [ngClass]="{'m-loader m-loader--right m-loader--info': loading}" type="submit"
+                                [disabled]="!form.valid" style="margin-top: 10px;">
+                                <i class="fa fa-search"></i> Search
+                            </button>
+                            <button class="mb-2 mr-2 btn-icon btn-shadow  btn btn-outline-danger " type="reset"
+                                (click)="resetTable()">
+                                <i class="fa fa-close"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col-sm-12 " style="margin-top: 10px;">
+        <button class="mb-2 mr-2 btn-icon btn-icon-only btn-shadow  btn btn-primary  float-end" (click)="AddEdit()"
+            title="Add New"><i class="fa fa-plus "></i></button>
+    </div>
+</div>
+<div class="material striped">
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="mat-elevation-z8">
+        <mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" style=" max-width: 100%;
+            width: 100%;">
+            <div class="row">
+                <!-- Hashing -->
+                <ng-container matColumnDef="sn.">
+                    <mat-header-cell *matHeaderCellDef> #. </mat-header-cell>
+                    <mat-cell *matCellDef="let content">{{content.serialNo}}</mat-cell>
+                </ng-container>
+                <!-- Status Coloumn -->
+                <ng-container matColumnDef="status" prop="status">
+                    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                    <mat-cell *matCellDef="let content">
+                        <ui-switch [loading]="loading" [checked]="(content.status == 1 ? true : false)" size="small"
+                            [(ngModel)]="content.status" (change)="updateStatus($event,content)">
+                            <i class="fa fa-spinner fa-pulse" *ngIf="loading"></i>
+                        </ui-switch>
+                    </mat-cell>
+                </ng-container>
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                    <mat-cell *matCellDef="let content">
+                        <button mat-icon-button class="action-button" color="primary"
+                            (click)="ViewContent(content.contentId)">
+                            <i class="fa fa-eye me-2"></i>
+                        </button>
+                        <button mat-icon-button *ngIf="content.status == 1" color="primary"
+                            (click)="AddEdit(content.contentId)">
+                            <i class="fa fa-edit me-2"></i>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="contentName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Content Name </mat-header-cell>
+                    <mat-cell *matCellDef="let content"> {{content.contentName}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="courseName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Course Name </mat-header-cell>
+                    <mat-cell *matCellDef="let content"> {{content.courseName}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="lectureTitle">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Lecture Title </mat-header-cell>
+                    <mat-cell *matCellDef="let content"> {{content.lectureTitle}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="order">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Content Order </mat-header-cell>
+                    <mat-cell *matCellDef="let content"> {{content.order}} </mat-cell>
+                </ng-container>
+
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let content; columns: displayedColumns;"></mat-row>
+            </div>
+        </mat-table>
+        <div *ngIf="noData">
+            <p style="text-align: center; margin-top: 15px;">No Data Found.</p>
+        </div>
+        <mat-paginator [length]="count" (page)="onPaginate($event)" [pageSize]="tableParams.limit" showFirstLastButtons
+            [pageSizeOptions]="[5,10,25,50, 100]"></mat-paginator>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+<div class="modal-header mb-0 p-3">
+    <h4 class="modal-title text-bold-500 font-medium-1">{{data.gradingId? "Edit Grade Criteria" :"Add Grade Criteria"}}
+    </h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeClick()">
+    </button>
+</div>
+<form [formGroup]="GradingCriteriaForm" (ngSubmit)="AddEditSubmit()">
+    <div class="modal-body" style="max-height:50vh ;width: 40vw; overflow: auto;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 ">
+                <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Select Grade</label>
+                <ng-select class="font-small-1" [items]="gradeName" bindLabel="name" bindValue="id"
+                    placeholder="Choose Option" formControlName="gradeName">
+                </ng-select>
+                <div *ngIf="GradingCriteriaForm.controls['gradeName'].touched && !GradingCriteriaForm.controls['gradeName'].valid">
+                    <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                        <span class="form-control-feedback"
+                            *ngIf="GradingCriteriaForm.controls['gradeName'].hasError(validation.type) ">
+                            {{validation.message}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 ">
+                <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Grade Start Range</label>
+                <ng-select class="font-small-1" [items]="grade_S_R" bindLabel="name" bindValue="id"
+                    placeholder="Choose Option" formControlName="grade_S_R">
+                </ng-select>
+                <div
+                    *ngIf="GradingCriteriaForm.controls['grade_S_R'].touched && !GradingCriteriaForm.controls['grade_S_R'].valid">
+                    <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                        <span class="form-control-feedback"
+                            *ngIf="GradingCriteriaForm.controls['grade_S_R'].hasError(validation.type) ">
+                            {{validation.message}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 ">
+                <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Grade End Range</label>
+                <ng-select class="font-small-1" [items]="grade_E_R" bindLabel="name" bindValue="id"
+                    placeholder="Choose Option" formControlName="grade_E_R">
+                </ng-select>
+                <div
+                    *ngIf="GradingCriteriaForm.controls['grade_E_R'].touched && !GradingCriteriaForm.controls['grade_E_R'].valid">
+                    <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                        <span class="form-control-feedback"
+                            *ngIf="GradingCriteriaForm.controls['grade_E_R'].hasError(validation.type) ">
+                            {{validation.message}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer mb-0 p-2">
+        <button class="btn btn-raised btn-secondary me-1 " type="button" [disabled]="loading" (click)="closeClick()">
+            <i class="fa fa-close"></i> Cancel
+        </button>
+        <button class="btn btn-raised btn-primary" type="submit" [disabled]="!GradingCriteriaForm.valid">
+            <i class="fa fa-check-square-o"></i> {{data.gradingId? "Update" :"Add"}}
+        </button>
+    </div>
+</form>

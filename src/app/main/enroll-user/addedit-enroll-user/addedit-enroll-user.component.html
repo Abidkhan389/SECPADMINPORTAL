@@ -1,0 +1,152 @@
+<!-- <div class="modal-header mb-0 p-3">
+    <h4 class="modal-title text-bold-500 font-medium-1">{{data.courseId? "Edit Enrollment" :"Add Enrollment"}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeClick()">
+    </button>
+</div>
+<form [formGroup]="EnrollUserForm" (ngSubmit)="AddEditSubmit()">
+    <div class="modal-body" style="max-height:70vh ; max-width:48wh; overflow: auto;">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 " style="padding:0px 15px;">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Select Category</label>
+                    <ng-select class="font-small-1" [items]="categoryList" bindLabel="categoryName" bindValue="categoryId"
+                        placeholder="Choose One Option" (change)="getCoursesDDlByCategory($event)" formControlName="categoryId">
+                    </ng-select>
+                    <div *ngIf="EnrollUserForm.controls['categoryId'].touched && !EnrollUserForm.controls['categoryId'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="EnrollUserForm.controls['categoryId'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="form-section">
+                    <div class="col-12 text-bold-400"><h5>Course</h5></div>
+                    <div class="col-12 float-right">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 text-center">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Select course</label>
+                    <ng-select class="font-small-1" [items]="CourseList" bindLabel="title" bindValue="courseId"
+                        placeholder="Choose One Option" formControlName="courseId">
+                    </ng-select>
+                    <div *ngIf="EnrollUserForm.controls['courseId'].touched && !EnrollUserForm.controls['courseId'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="EnrollUserForm.controls['courseId'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 text-center">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Select User</label>
+                    <ng-select class="font-small-1" [items]="UserList" bindLabel="userName" bindValue="userId"
+                        placeholder="Choose One Option" formControlName="userId">
+                    </ng-select>
+                    <div *ngIf="EnrollUserForm.controls['userId'].touched && !EnrollUserForm.controls['userId'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="EnrollUserForm.controls['userId'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="modal-footer mb-0 p-2">
+        <button class="btn btn-raised btn-secondary me-1 " type="button" [disabled]="loading" (click)="closeClick()">
+            <i class="fa fa-close"></i> Cancel
+        </button>
+        <button class="btn btn-raised btn-primary" type="submit" [disabled]="!EnrollUserForm.valid">
+            <i class="fa fa-check-square-o"></i> {{data.courseId? "Update" :"Add"}}
+        </button>
+    </div>
+</form> -->
+<div class="modal-header mb-0 p-3">
+    <h4 class="modal-title text-bold-500 font-medium-1">{{data.IsReadOnly? "View" : (data.enrolledId? "Edit" : "Add")}}
+        Enrollment
+    </h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeClick()">
+    </button>
+</div>
+<form [formGroup]="EnrollUserForm" (ngSubmit)="AddEdit()">
+    <div class="modal-body" style="max-height: 70vh; width: 40vw; overflow:auto;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Select Category</label>
+                    <ng-select class="font-small-1" [items]="categoryList" bindLabel="categoryName" 
+                        bindValue="categoryId" placeholder="Select Category" (change)="getCourses($event.categoryId)"
+                        formControlName="categoryId">
+                    </ng-select>
+                    <div *ngIf="EnrollUserForm.controls['categoryId'].touched && !EnrollUserForm.controls['categoryId'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="EnrollUserForm.controls['categoryId'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="row" style="padding-top: 10px;">
+                <div class="col-12 text-bold-400">
+                    <h5>Enrollment</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="form-field">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Select Course</label>
+                    <ng-select class="font-small-1" [items]="courseList" bindLabel="title" bindValue="courseId" appendTo="body"
+                        placeholder="Select Course" formControlName="courseId">
+                    </ng-select>
+                    <div *ngIf="EnrollUserForm.controls['courseId'].touched && !EnrollUserForm.controls['courseId'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="EnrollUserForm.controls['courseId'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="form-field">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }">Select User</label>
+                    <ng-select class="font-small-1" [items]="UserList" bindLabel="userName" bindValue="userId"
+                        placeholder="Choose One Option" formControlName="userId">
+                    </ng-select>
+                    <div *ngIf="EnrollUserForm.controls['userId'].touched && !EnrollUserForm.controls['userId'].valid">
+                        <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                            <span class="form-control-feedback"
+                                *ngIf="EnrollUserForm.controls['userId'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="modal-footer mb-0 p-2 ">
+            <button class="btn btn-raised btn-secondary me-1 " type="button" [disabled]="loading"
+                (click)="closeClick()">
+                <i class="fa fa-close"></i> Cancel
+            </button>
+            <button class="btn btn-raised btn-primary" type="submit" [disabled]="!EnrollUserForm.valid || loading"
+                [ngClass]="{'m-loader m-loader--right m-loader--info': loading}">
+                <i class="fa fa-check-square-o"></i>Save
+            </button>
+        </div>
+</form>

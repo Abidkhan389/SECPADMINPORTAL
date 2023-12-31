@@ -1,0 +1,70 @@
+<div>
+  <div class="row ">
+    <div class="col-md-6">
+      <div class="form-group ">
+        <label>{{options.label ? options.label : 'Upload Attachment'}}</label>
+      </div>
+    </div>
+    <div class="col-md-6" *ngIf="options.maxFiles > attachments.length  && !addNewAttachments">
+      <div class="form-group ">
+        <button type="button" *ngIf="!options.disableActions" (click)="addNewAttachments=!addNewAttachments"
+          class="btn btn-outline-primary mb-2 float-end" title="Add New Attachment">
+          <i class="fa fa-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row drop-area" [ngClass]="{'show':addNewAttachments}">
+    <div class="col-md-12">
+      <div class="form-group">
+        <a (click)="onClickUpload($event)" [id]="id" (drop)="onDrop($event)" (dragover)="dragOver($event)"
+          (dragenter)="dragEnter($event)">
+          <div class='drop-zone'>
+            <span class="font-small-2"> {{uploadFileName==null?uploadText:uploadFileName}}</span> <br>
+            <span class="font-small-1">Maximum size of {{options.size}}.
+              ({{options.accept}})</span>
+            <input (change)="onFileChange($event)" type="file" [id]="id+1" name="file" style="display: none;" #fileInput
+              [accept]="options.accept" [multiple]="options.multiple">
+          </div>
+        </a>
+        <div *ngIf="statusBar!=null">
+          <ngb-progressbar type="warning" [value]="statusBar" [striped]="true" [animated]="true"><i>{{statusBar}}%</i>
+          </ngb-progressbar>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!addNewAttachments">
+    <div class="col-md-12">
+      <div class="table-responsive mb-1">
+
+        <table class="table table-bordered" [id]="idValue">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>File Name</th>
+              <th>Size</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody class="table-hover">
+            <tr *ngFor="let file of attachments; let i = index">
+              <th scope="row">{{i+1}}</th>
+              <td>{{file.fileName}}</td>
+              <td>{{file.fileSize|aimsFileSize}}</td>
+              <td>
+                <a href="#" *ngIf="!options.disableActions" (click)="deleteFile(file)" style="padding-left: 10px;"><i
+                  class="fa fa-trash me-1"></i></a>
+                <a href="#" (click)="downloadFile(file)"><i class="fa fa-download"></i></a>
+              </td>
+            </tr>
+            <tr *ngIf="attachments.length<1">
+              <td align="center" colspan="4">No Attachment</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

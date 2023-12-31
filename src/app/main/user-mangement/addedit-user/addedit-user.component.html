@@ -1,0 +1,155 @@
+<div class="modal-header mb-0 p-3">
+    <h4 class="modal-title text-bold-500 font-medium-1">{{data.readOnly? "View" : (data.userId? "Edit" : "Add")}}
+        User
+    </h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeClick()">
+    </button>
+</div>
+<form [formGroup]="userForm" (ngSubmit)="AddEdit()">
+    <div class="modal-body" style="max-height: 70vh; overflow:auto;">
+        <div class="row">
+            <div class=" col-lg-12 col-md-12 col-sm-12 col-12">
+                <mat-form-field appearance="outline" style="display: block;">
+                    <mat-label>User Name</mat-label>
+                    <input matInput formControlName="username" placeholder="Ex. pat@example.com">
+                    <mat-error *ngIf="userForm.controls['username'].touched && !userForm.controls['username'].valid">
+                        <mat-error *ngFor="let validation of validationMessages.value">
+                            <mat-error *ngIf="userForm.controls['username'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </mat-error>
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-field" style="padding-bottom: 20px;">
+                    <label [ngStyle]="{color: isreadOnly? 'grey': 'black' }"> User Role</label>
+                    <ng-select class="font-small-1" [items]="roles" bindLabel="name" bindValue="role"
+                        placeholder="Select Type" formControlName="role">
+                    </ng-select>
+                    <div *ngIf="userForm.controls['role'].touched && !userForm.controls['role'].valid">
+                        <div class="has-danger" *ngFor="let validation of validationMessages.value">
+                            <span class="form-control-feedback"
+                                *ngIf="userForm.controls['role'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=" col-lg-4 col-md-4 col-sm-12 col-12">
+                <mat-form-field appearance="outline" style="display: block;">
+                    <mat-label>First Name</mat-label>
+                    <input matInput formControlName="firstName" placeholder="JON">
+                    <mat-error *ngIf="userForm.controls['firstName'].touched && !userForm.controls['firstName'].valid">
+                        <mat-error *ngFor="let validation of validationMessages.value">
+                            <mat-error *ngIf="userForm.controls['firstName'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </mat-error>
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class=" col-lg-4 col-md-4 col-sm-12 col-12">
+                <mat-form-field appearance="outline" style="display: block;">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput formControlName="lastName" placeholder="DOE">
+                    <mat-error *ngIf="userForm.controls['lastName'].touched && !userForm.controls['lastName'].valid">
+                        <mat-error *ngFor="let validation of validationMessages.value">
+                            <mat-error *ngIf="userForm.controls['lastName'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </mat-error>
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class=" col-lg-4 col-md-4 col-sm-12 col-12">
+                <mat-form-field color="accent" appearance="outline" style="display: block;">
+                    <mat-label>DOB</mat-label>
+                    <input matInput [matDatepicker]="picker2" formControlName="dob" placeholder="MM/DD/YYYY">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker2"
+                        style="position: absolute; margin:-28px; line-height: 68px;"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2 color="primary"></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class=" col-lg-4 col-md-4 col-sm-12 col-12">
+                <mat-form-field appearance="outline" style="display: block;">
+                    <mat-label>CNIC</mat-label>
+                    <input matInput inputmask="'99999-9999999-9'" formControlName="cnic" placeholder="XXXXX-XXXXXXX-X">
+                    <mat-error *ngIf="userForm.controls['cnic'].touched && !userForm.controls['cnic'].valid">
+                        <mat-error *ngFor="let validation of validationMessages.cnic">
+                            <mat-error *ngIf="userForm.controls['cnic'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </mat-error>
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                <!-- <mat-form-field appearance="outline" style="display: block;"> -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Mobile</mat-label>
+                    <!-- <span matPrefix>03</span> -->
+                    <input matInput placeholder="0" formControlName="mobileNumber">
+                    <mat-error
+                        *ngIf="userForm.controls['mobileNumber'].touched && !userForm.controls['mobileNumber'].valid">
+                        <mat-error *ngFor="let validation of validationMessages.mobileLength">
+                            <mat-error *ngIf="userForm.controls['mobileNumber'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </mat-error>
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                <mat-form-field appearance="outline" style="display: block;">
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+                    <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="userForm.controls['password'].touched && !userForm.controls['password'].valid">
+                        <mat-error *ngFor="let validation of validationMessages.value">
+                            <mat-error *ngIf="userForm.controls['password'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </mat-error>
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <mat-form-field appearance="outline" style="width: inherit;">
+                    <mat-label>Address</mat-label>
+                    <textarea matInput formControlName="address" placeholder="Add User Address"></textarea>
+                    <mat-error *ngIf="userForm.controls['address'].touched && !userForm.controls['address'].valid">
+                        <mat-error *ngFor="let validation of validationMessages.value">
+                            <mat-error *ngIf="userForm.controls['address'].hasError(validation.type) ">
+                                {{validation.message}}
+                            </mat-error>
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="modal-footer mb-0 p-2 ">
+        <button class="btn btn-raised btn-secondary me-1 " type="button" [disabled]="loading" (click)="closeClick()">
+            <i class="fa fa-close"></i> Cancel
+        </button>
+        <button class="btn btn-raised btn-primary" type="submit" [disabled]="!userForm.valid || loading"
+            [ngClass]="{'m-loader m-loader--right m-loader--info': loading}">
+            <i class="fa fa-check-square-o"></i>Save
+        </button>
+    </div>
+</form>

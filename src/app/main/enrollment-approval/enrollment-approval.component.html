@@ -1,0 +1,105 @@
+<div class="filter-widget card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" role="form">
+        <div (click)="isCollapsed = !isCollapsed" class="filter-header p-2">
+            <span class="filter-title"><i class="fa fa-search me-2"></i>Advanced Search Filters</span>
+            <a [attr.aria-expanded]="!isCollapsed" aria-controls="collapseFilter" style="float:right">
+                <i class="fa fa-search" [ngClass]="{'fa-chevron-down': !isCollapsed, 'fa-chevron-up': isCollapsed}"></i>
+            </a>
+        </div>
+        <div id="collapseFilter" [ngbCollapse]="!isCollapsed">
+            <div class="filter-content container-fluid">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>User Name:</label>
+                            <input type="text" class="form-control " formControlName="userName" placeholder="Search">
+                            <div *ngIf="form.controls['userName'].touched && !form.controls['userName'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['userName'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Course Name:</label>
+                            <input type="text" class="form-control " formControlName="courseName" placeholder="Search">
+                            <div *ngIf="form.controls['courseName'].touched && !form.controls['courseName'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['courseName'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col-lg-12">
+                        <div class="form-group mb-0">
+                            <button class="mb-2 me-2 btn-icon btn-shadow  btn btn-primary"
+                                [ngClass]="{'m-loader m-loader--right m-loader--info': loading}" type="submit"
+                                [disabled]="!form.valid" style="margin-top: 10px;">
+                                <i class="fa fa-search"></i> Search
+                            </button>
+                            <button class="mb-2 mr-2 btn-icon btn-shadow  btn btn-outline-danger " type="reset"
+                                (click)="resetTable()">
+                                <i class="fa fa-close"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="material striped">
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="mat-elevation-z8">
+        <mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" style=" max-width: 100%;
+            width: 100%;">
+            <div class="row">
+                <!-- Hashing -->
+                <ng-container matColumnDef="sn.">
+                    <mat-header-cell *matHeaderCellDef> #. </mat-header-cell>
+                    <mat-cell *matCellDef="let UserApproval">{{UserApproval.serialNo}}</mat-cell>
+                </ng-container>
+                <!-- Actions Column -->
+                <ng-container matColumnDef="Approval">
+                    <mat-header-cell *matHeaderCellDef> Approval </mat-header-cell>
+                    <mat-cell *matCellDef="let UserApproval">
+                        <button mat-icon-button color="primary" (click)="confirmBox(UserApproval.enrolledId)">
+                            <!-- <mat-icon><span class='material-icons-outlined'>approval</span></mat-icon> -->
+                            <!-- <mat-icon>check_box_outline_blank</mat-icon> -->
+
+                            <mat-icon>check</mat-icon>
+                        </button>
+                    </mat-cell>
+
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="courseName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Course Name </mat-header-cell>
+                    <mat-cell *matCellDef="let UserApproval"> {{UserApproval.courseName}} </mat-cell>
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="userName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> User Name </mat-header-cell>
+                    <mat-cell *matCellDef="let UserApproval"> {{UserApproval.userName}} </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let UserApproval; columns: displayedColumns;"></mat-row>
+            </div>
+        </mat-table>
+        <div *ngIf="noData">
+            <p style="text-align: center;margin-top: 15px;">No Approval request Found.</p>
+        </div>
+        <mat-paginator [length]="count" (page)="pageChanged($event)" showFirstLastButtons
+            [pageSizeOptions]="[5,10, 100, 200]">
+        </mat-paginator>
+    </div>
+</div>

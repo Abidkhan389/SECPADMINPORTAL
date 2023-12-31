@@ -1,0 +1,144 @@
+<div class="filter-widget card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" role="form">
+        <div (click)="isCollapsed = !isCollapsed" class="filter-header p-2">
+            <span class="filter-title"><i class="fa fa-search me-2"></i>Advanced Search Filters</span>
+            <a [attr.aria-expanded]="!isCollapsed" aria-controls="collapseFilter" style="float:right">
+                <i class="fa fa-search" [ngClass]="{'fa-chevron-down': !isCollapsed, 'fa-chevron-up': isCollapsed}"></i>
+            </a>
+        </div>
+        <div id="collapseFilter" [ngbCollapse]="!isCollapsed">
+            <div class="filter-content">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>User Name:</label>
+                            <input type="email" class="form-control " formControlName="username"
+                                placeholder="ex@gmail.com">
+                            <div *ngIf="form.controls['username'].touched && !form.controls['username'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['username'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>CNIC:</label>
+                            <input type="text" class="form-control " formControlName="CNIC" placeholder="XXXXXXXXXXXXX">
+                            <div *ngIf="form.controls['CNIC'].touched && !form.controls['CNIC'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['CNIC'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Course Name:</label>
+                            <input type="text" class="form-control " formControlName="courseTitle"
+                                placeholder="Enter Name">
+                            <div *ngIf="form.controls['courseTitle'].touched && !form.controls['courseTitle'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['courseTitle'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Enrolled Status:</label>
+                            <select class="form-control" formControlName="enrolledStatus">
+                                <option value="">Choose one option</option>
+                                <option value="1">Completed</option>
+                                <option value="0">Ongoing</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row ">
+                    <div class="col-lg-12">
+                        <div class="form-group mb-0">
+                            <button class="mb-2 me-2 btn-icon btn-shadow  btn btn-primary"
+                                [ngClass]="{'m-loader m-loader--right m-loader--info': loading}" type="submit"
+                                [disabled]="!form.valid" style="margin-top: 10px;">
+                                <i class="fa fa-search"></i> Search
+                            </button>
+                            <button class="mb-2 mr-2 btn-icon btn-shadow  btn btn-outline-danger " type="reset"
+                                (click)="resetTable()">
+                                <i class="fa fa-close"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="material striped">
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="mat-elevation-z8">
+        <mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" style=" max-width: 100%;
+            width: 100%;">
+            <div class="row">
+                <!-- Hashing -->
+                <ng-container matColumnDef="sn.">
+                    <mat-header-cell *matHeaderCellDef> #. </mat-header-cell>
+                    <mat-cell *matCellDef="let Report">{{Report.serialNo}}</mat-cell>
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="userName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> User Name </mat-header-cell>
+                    <mat-cell *matCellDef="let Report"> {{Report.userName}} </mat-cell>
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="userCnic">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> CNIC </mat-header-cell>
+                    <mat-cell *matCellDef="let Report"> {{Report.cnic}} </mat-cell>
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="userMob-Num">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Mobile Number </mat-header-cell>
+                    <mat-cell *matCellDef="let Report"> {{Report.mobileNumber}} </mat-cell>
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="courseName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Course Name </mat-header-cell>
+                    <mat-cell *matCellDef="let Report"> {{Report.courseTitle}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="enrollmentStatus">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Enrolled Status </mat-header-cell>
+                    <mat-cell *matCellDef="let Report"> {{Report.enrolledStatus == "1" ? "Completed" :
+                        "Ongoing"}}</mat-cell>
+                </ng-container>
+                 <!-- Status Coloumn -->
+                 <ng-container matColumnDef="Assign" prop="Assign">
+                    <mat-header-cell *matHeaderCellDef> Assign </mat-header-cell>
+                    <mat-cell *matCellDef="let Report">
+                        <ui-switch [loading]="loading" [checked]="(Report.status == 1 ? true : false)" size="small"
+                            [(ngModel)]="Report.status" (change)="confirmBox($event,Report)" *ngIf="Report.enrolledStatus == 0">
+                            <i class="fa fa-spinner fa-pulse" *ngIf="loading"></i>
+                        </ui-switch>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let Report; columns: displayedColumns;"></mat-row>
+            </div>
+        </mat-table>
+        <div *ngIf="noData">
+            <p style="text-align: center;margin-top: 15px;">No Data Found.</p>
+        </div>
+        <mat-paginator [length]="count" (page)="pageChanged($event)" showFirstLastButtons
+            [pageSizeOptions]="[5,10, 100, 200]">
+        </mat-paginator>
+    </div>
+</div>

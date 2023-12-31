@@ -1,0 +1,159 @@
+<div class="filter-widget card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" role="form">
+        <div (click)="isCollapsed = !isCollapsed" class="filter-header p-2">
+            <span class="filter-title"><i class="fa fa-search me-2"></i>Advanced Search Filters</span>
+            <a [attr.aria-expanded]="!isCollapsed" aria-controls="collapseFilter" style="float:right">
+                <i class="fa fa-search" [ngClass]="{'fa-chevron-down': !isCollapsed, 'fa-chevron-up': isCollapsed}"></i>
+            </a>
+        </div>
+        <div id="collapseFilter" [ngbCollapse]="!isCollapsed">
+            <div class="filter-content container-fluid">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Course:</label>
+                            <ng-select class="font-small-1" [items]="CoursesList" bindLabel="courseName"
+                                bindValue="courseId" placeholder="Choose Course" formControlName="courseId">
+                            </ng-select>
+                            <div *ngIf="form.controls['courseId'].touched && !form.controls['courseId'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['courseId'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Question Name:</label>
+                            <input type="text" class="form-control " formControlName="question" placeholder="Search">
+                            <div *ngIf="form.controls['question'].touched && !form.controls['question'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['question'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Difficulty Type:</label>
+                            <!-- <select class="form-control" formControlName="difficultyType"> -->
+                            <ng-select class="font-small-1" [items]="questionLevel" bindLabel="name" bindValue="id"
+                                [clearable]="true" placeholder="Choose one option" formControlName="difficultyType">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Question Type:</label>
+                            <ng-select class="font-small-1" [items]="questionType" bindLabel="name" bindValue="id"
+                                [clearable]="true" placeholder="Choose one option" formControlName="questionType">
+                            </ng-select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <select class="form-control" formControlName="status">
+                                <option value="">Choose one option</option>
+                                <option value="1">Active</option>
+                                <option value="0">In Active</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col-lg-12">
+                        <div class="form-group mb-0">
+                            <button class="mb-2 me-2 btn-icon btn-shadow  btn btn-primary"
+                                [ngClass]="{'m-loader m-loader--right m-loader--info': loading}" type="submit"
+                                [disabled]="!form.valid" style="margin-top: 10px;">
+                                <i class="fa fa-search"></i> Search
+                            </button>
+                            <button class="mb-2 mr-2 btn-icon btn-shadow  btn btn-outline-danger " type="reset"
+                                (click)="resetTable()">
+                                <i class="fa fa-close"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col-sm-12 " style="margin-top: 10px;">
+        <button class="mb-2 mr-2 btn-icon btn-icon-only btn-shadow  btn btn-primary  float-end" (click)="AddEdit()"
+            title="Add New"><i class="fa fa-plus "></i></button>
+    </div>
+</div>
+<div class="material striped">
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="mat-elevation-z8" *ngIf="!dataFound">
+        <mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" style=" max-width: 100%;
+            width: 100%;">
+            <div class="row">
+                <!-- Hashing -->
+                <ng-container matColumnDef="sn.">
+                    <mat-header-cell *matHeaderCellDef> #. </mat-header-cell>
+                    <mat-cell *matCellDef="let assessment ">{{ assessment.serialNo}}</mat-cell>
+                </ng-container>
+                <!-- Status Coloumn -->
+                <ng-container matColumnDef="status" prop="status">
+                    <mat-header-cell *matHeaderCellDef style="width:100%"> Status </mat-header-cell>
+                    <mat-cell *matCellDef="let assessment">
+                        <ui-switch [loading]="loading" [checked]="(assessment.status == 1 ? true : false)" size="small"
+                            [(ngModel)]="assessment.status" (change)="updateStatus($event,assessment)">
+                            <i class="fa fa-spinner fa-pulse" *ngIf="loading"></i>
+                        </ui-switch>
+                    </mat-cell>
+                </ng-container>
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                    <mat-cell *matCellDef="let assessment">
+                        <button mat-icon-button class="action-button" color="primary"
+                            (click)="ViewAssessment(assessment.assessmentId)">
+                            <i class="fa fa-eye me-1"></i>
+                        </button>
+                        <button mat-icon-button color="primary" *ngIf="assessment.status==1"
+                            (click)="AddEdit(assessment.assessmentId)">
+                            <i class="fa fa-edit me-1"></i>
+                        </button>
+
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="courseName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Course Name </mat-header-cell>
+                    <mat-cell *matCellDef="let assessment"> {{assessment.courseName}} </mat-cell>
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="question">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Question </mat-header-cell>
+                    <mat-cell *matCellDef="let assessment">
+                        <p [innerHTML]="assessment.question">
+                        </p>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let assessment; columns: displayedColumns;"></mat-row>
+            </div>
+        </mat-table>
+        <div *ngIf="noData">
+            <p style="text-align: center; margin-top: 15px;">No Data Found.</p>
+        </div>
+        <mat-paginator [length]="count" (page)="pageChanged($event)" showFirstLastButtons
+            [pageSizeOptions]="[5,10, 100, 200]">
+        </mat-paginator>
+    </div>
+</div>

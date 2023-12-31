@@ -1,0 +1,66 @@
+<form role="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate action="">
+  <div class="modal-dialog w-100 mx-auto">
+    <div class="modal-content" style="border-color:rgb(27, 233, 154);">
+      <div class="modal-body">
+        <div class="h5 modal-title text-center">
+          <h4 class="mt-2">
+            <div>Welcome back,</div>
+            <span>Please sign in to your account below.</span>
+          </h4>
+        </div>
+        <div class="mb-3">
+          <input type="text" class="form-control login-input" placeholder="Eg.admin@mail.com"
+            aria-label="Recipient's username" aria-describedby="basic-addon2" formControlName="userName">
+          <div>
+            <div *ngIf="form.controls['userName'].touched && !form.controls['userName'].valid">
+              <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                <span class="form-control-feedback" *ngIf="form.controls['userName'].hasError(validation.type) ">
+                  {{validation.message}}
+                </span>
+              </div>
+            </div>
+            <!-- <small tabindex="-1" id="exampleInputGroup1__BV_description_" class="form-text text-muted">
+              We'll never share your email with anyone else.
+            </small> -->
+          </div>
+        </div>
+        <div class="mb-3">
+          <input type="password" class="form-control login-input" placeholder="password"
+            aria-label="Recipient's username" aria-describedby="basic-addon2" formControlName="password">
+          <div>
+            <div *ngIf="form.controls['password'].touched && !form.controls['password'].valid">
+              <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                <span class="form-control-feedback" *ngIf="form.controls['password'].hasError(validation.type) ">
+                  {{validation.message}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="custom-control custom-checkbox form-check">
+          <input id="rememberMe" type="checkbox" formControlName="rememberMe" name="check" autocomplete="off"
+            class="form-check-input" value="true" />
+          <label for="rememberMe" class="form-label form-check-label">
+            Keep me logged in
+          </label>
+        </div>
+        <!-- <div class="divider"></div> -->
+        <!-- <h6 class="mb-0">
+          No account?
+          <a routerLink="" class="text-primary">Sign up now</a>
+        </h6>  -->
+      </div>
+      <div class="modal-footer clearfix">
+        <div class="float-start">
+          <a routerLink="" class="btn-lg btn btn-link">Recover Password</a>
+        </div>
+        <div class="float-end">
+          <button type="submit" class="btn btn-primary btn-lg" [disabled]="!form.valid || loading"
+            [ngClass]="{'m-loader m-loader--right m-loader--info': loading}">
+            Login to Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,155 @@
+<div class="filter-widget card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" role="form">
+        <div (click)="isCollapsed = !isCollapsed" class="filter-header p-2">
+            <span class="filter-title"><i class="fa fa-search me-2"></i>Advanced Search Filters</span>
+            <a [attr.aria-expanded]="!isCollapsed" aria-controls="collapseFilter" style="float:right">
+                <i class="fa fa-search" [ngClass]="{'fa-chevron-down': !isCollapsed, 'fa-chevron-up': isCollapsed}"></i>
+            </a>
+        </div>
+        <div id="collapseFilter" [ngbCollapse]="!isCollapsed">
+            <div class="filter-content">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>User Name:</label>
+                            <input type="text" class="form-control " formControlName="userName"
+                                placeholder="Search Here">
+                            <div *ngIf="form.controls['userName'].touched && !form.controls['userName'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['userName'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Course Title:</label>
+                            <input type="text" class="form-control " formControlName="courseTitle"
+                                placeholder="Search Here">
+                            <div *ngIf="form.controls['courseTitle'].touched && !form.controls['courseTitle'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['courseTitle'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>Grade:</label>
+                            <input type="text" class="form-control " formControlName="grade" placeholder="Search Here">
+                            <div *ngIf="form.controls['grade'].touched && !form.controls['grade'].valid">
+                                <div *ngFor="let validation of validationMessages.value" class="has-danger">
+                                    <span class="form-control-feedback"
+                                        *ngIf="form.controls['grade'].hasError(validation.type) ">
+                                        {{validation.message}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col-lg-12">
+                        <div class="form-group mb-0">
+                            <button class="mb-2 me-2 btn-icon btn-shadow  btn btn-primary"
+                                [ngClass]="{'m-loader m-loader--right m-loader--info': loading}" type="submit"
+                                [disabled]="!form.valid" style="margin-top: 10px;">
+                                <i class="fa fa-search"></i> Search
+                            </button>
+                            <button class="mb-2 mr-2 btn-icon btn-shadow  btn btn-outline-danger " type="reset"
+                                (click)="resetTable()">
+                                <i class="fa fa-close"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="material striped">
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <div class="mat-elevation-z8">
+        <mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" style=" max-width: 100%;
+            width: 100%;">
+            <div class="row">
+                <!-- Hashing -->
+                <ng-container matColumnDef="sn.">
+                    <mat-header-cell *matHeaderCellDef> #. </mat-header-cell>
+                    <mat-cell *matCellDef="let Report">{{Report.serialNo}}</mat-cell>
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="userName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> User Name </mat-header-cell>
+                    <mat-cell *matCellDef="let Report"> {{Report.userName}} </mat-cell>
+                </ng-container>
+                <!-- Course Name Column -->
+                <ng-container matColumnDef="courseName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Course Title </mat-header-cell>
+                    <mat-cell *matCellDef="let Report"> {{Report.courseTitle}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="grade">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Grade </mat-header-cell>
+                    <mat-cell *matCellDef="let Report"> {{Report.grade}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="certificate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Certificate </mat-header-cell>
+                    <mat-cell *matCellDef="let Report">
+                        <button mat-icon-button color="primary" (click)="ViewCertificate(content, Report.gradeId)">
+                            <i class="fa fa-file me-1"></i>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let Report; columns: displayedColumns;"></mat-row>
+            </div>
+        </mat-table>
+        <div *ngIf="noData">
+            <p style="text-align: center;margin-top: 15px;">No Data Found.</p>
+        </div>
+        <mat-paginator [length]="count" (page)="pageChanged($event)" showFirstLastButtons
+            [pageSizeOptions]="[5,10, 100, 200]">
+        </mat-paginator>
+    </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-body">
+        <div class="outer-border" id="print">
+            <div class="inner-dotted-border">
+                <span class="certification">Certificate of Completion</span>
+                <br>
+                <span class="certification" style="font-size:28px"><i>by Securities & Exchange Commission </i></span>
+                <br><br>
+                <span class="certify"><i>This is to certify that</i></span>
+                <br>
+                <br>
+                <span class="name"><b>{{user | titlecase}}</b></span><br /><br />
+                <span class="certify"><i>has successfully completed the Training</i></span> <br /><br />
+                <span class="fs-30">{{userGrade.courseTitle}}</span>
+                <br /><br />
+                <span class="fs-20">with score of <b>{{userGrade.grade}}</b></span> <br /><br />
+                <span class="certify"><i>dated</i></span><br>
+                <span class="fs-30">{{userGrade.date}}</span>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="mb-2 mr-2 btn-icon btn-shadow  btn btn-outline-secondary" type="button" [disabled]="loading"
+            (click)="c('Cross click')">
+            <i class="ft-x"></i> Cancel
+        </button>
+        <button class="mb-2 me-2 btn-icon btn-shadow  btn btn-outline-primary" type="button"
+            [ngClass]="{'m-loader m-loader--right m-loader--info': loading}" (click)="onPrint()">
+            <i class="fa fa-check-square-o"></i> Print
+        </button>
+    </div>
+</ng-template>
